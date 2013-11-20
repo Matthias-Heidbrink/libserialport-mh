@@ -666,8 +666,13 @@ static enum sp_return get_config(struct sp_port *port, struct port_data *data,
 		}
 	}
 
-	if (i == NUM_STD_BAUDRATES)
+	if (i == NUM_STD_BAUDRATES) {
+#ifdef __APPLE__
+		config->baudrate = (int)data->term.c_ispeed;
+#else
 		config->baudrate = -1;
+#endif
+	}
 
 	switch (data->term.c_cflag & CSIZE) {
 	case CS8:
